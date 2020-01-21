@@ -9,7 +9,7 @@
 
                 <div class="card-body" id="app">
                     
-                    <chat-app :user="{{ auth()->user() }}"></chat-app>
+                    <p>coba wahyono</p>
                 </div>
             </div>
         </div>

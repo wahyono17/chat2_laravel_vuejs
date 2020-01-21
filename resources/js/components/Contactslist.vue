@@ -7,6 +7,9 @@
                     <p class="name">{{contact.name}}</p>
                     <p class="email">{{contact.email}}</p>
                 </div>
+                
+                <span class="unread" v-if="contact.unread">{{contact.unread}}</span>
+                
             </li>
         </ul>
     </div>
@@ -22,7 +25,7 @@
         },
         data() {
             return {
-                selected:0
+                selected: 0 //this.contacts.length ? this.contacts[0] : null
             }
         },
         methods: {
@@ -31,6 +34,16 @@
                 this.$emit('selected',contact);
             },
         },
+        computed:{
+            sortedContact(){
+                return _.sortBy(this.contacts,[(contact)=>{
+                    if(contact == this.selected){
+                        return Infinity;
+                    }
+                    return contact.unread;
+                }]).reverse()
+            }
+        }
     }
 </script>
 <style lang="scss">
@@ -53,6 +66,17 @@ ul{
          &.selected {
                 background: #dfdfdf;
             }
+        span.unread{
+            background: #4aef4a;
+            color: white;
+            position: absolute;
+            right: 11px;
+            top: 15px;
+            display: flex;
+            font-weight: 700;
+            /* min-width: 200px; */
+            justify-content: center;
+        }    
 
         .avatar{
             flex: 1;

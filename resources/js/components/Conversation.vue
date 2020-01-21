@@ -30,7 +30,7 @@ import messageFeed from './messageFeed';
                     contact_id : this.contact.id,
                     text : text
                 }).then ((response)=>{
-                    console.log(response.data);
+                    //console.log(response.data);
                     this.$emit('new',response.data);
                 })
             }
