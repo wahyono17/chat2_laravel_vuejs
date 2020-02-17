@@ -26,11 +26,8 @@ import Contactslist from './Contactslist';
             Echo.private(`messages.${this.user.id}`)
                 .listen('NewMessage', (e) => {
                     this.handleIncoming(e.message);
-                    //this.messages.push(e.message);
-                    //console.log(e.message);
                 });
-                
-            //console.log(`messages.${this.user.id}`)
+             
             axios.get('/contacts')
                 .then((response)=>{
                     //console.log(response.data);
@@ -39,32 +36,32 @@ import Contactslist from './Contactslist';
         },
         methods: {
             startConversationWith(contact){
-                //this.updateUnreadCount(contact,true)
+                this.updateUnreadCount(contact,true);
 
                 axios.get(`/conversation/${contact.id}`)
                 .then(response=>{
                     this.messages = response.data;
-                    //console.log(contact);
-                    
+                     
                     this.selectedContact = contact;
-                    //console.log(message.from);
                 })
             },
             saveNewMessage(message){
                 this.messages.push(message);
-                //console.log(message);
             },
             handleIncoming(message){
-                //if(this.selectedContact && message.from == this.selectedContact.id){
+                //ini untuk batasi hanya yang di kirim yang bisa terima chat,, di front end nya waktu push
+                //menghilangkan this.selectedContact && karena tidak di perlukan sebenarnya
+                if(message.from == this.selectedContact.id){
                     this.saveNewMessage(message);
-                    //this.updateUnreadCount(contact,false)
-                    alert(message.text);
-                    //return;
-                    //this.messages.push(message); //ini sudah di lakukan di baris atas
-                //}
-                //alert(message.text);
+                    return;
+                } else
+                
+                this.updateUnreadCount(message.from_contact,false);
+                //this.sortedContacts();
+                //console.log(message);
             },
-            //method baru
+            //method baru untuk tambahkan count chat, jika tidak di click di contact nya 
+            //jika di pasang di method hanleincoming
             updateUnreadCount(contact,reset){
                 this.contacts = this.contacts.map((single)=>{
                     if(single.id != contact.id){
@@ -74,9 +71,15 @@ import Contactslist from './Contactslist';
                         single.unread = 0;
                     else
                         single.unread += 1;
+                        //return Infinity;
 
                     return single;
                 })
+            },
+            sortedContacts(){
+                return _.sortBy(this.contacts,[(contact)=>{
+                    return Infinity;    
+                }])
             }
         },
         components:{Conversation,Contactslist}

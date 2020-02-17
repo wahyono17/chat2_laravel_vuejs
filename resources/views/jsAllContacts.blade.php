@@ -8,11 +8,12 @@
                 <div class="card-header">Dashboard</div>
 
                 <div class="card-body" id="app">
-                    
-                    <chat-app :user="{{ auth()->user() }}"></chat-app>
+                    <all-contacts :user="{{ auth()->user() }}"></all-contacts>
                 </div>
             </div>
         </div>
+            
     </div>
+    
 </div>
 @endsection

@@ -18,9 +18,15 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/cek', 'HomeController@lihatUser')->name('lihat');
-Route::get('/coba', 'CobaController@get');
+
+Route::get('/jsAllContacts', function () {return view('jsAllContacts');});
+Route::get('/allcontactsjs','ContactsController@getAlljson');
+
+Route::get('/allcontacts','ContactsController@getAll');
+Route::get('/chatwith/{id}','ContactsController@contactbyId');
 
 Route::get('/contacts','ContactsController@get');
+Route::get('/contact/{nama}','ContactsController@getbyName');
 Route::get('/conversation/{id}','ContactsController@getMessagesFor');
 Route::post('/conversation/send', 'ContactsController@send');
 

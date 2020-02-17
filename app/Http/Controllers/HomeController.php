@@ -25,6 +25,11 @@ class HomeController extends Controller
     {
         return view('home');
     }
+    public function contactsAll()
+    {
+        return view('allcontacts');
+    }
+
 
     public function lihatUser(){
         dd(auth()->user());

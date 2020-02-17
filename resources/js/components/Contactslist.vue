@@ -1,7 +1,7 @@
 <template>
     <div class="contact-list">
         <ul>
-            <li v-for="(contact,index) in contacts" :key="contact.id" @click="selectContact(index,contact)">
+            <li v-for="contact in sortArrays" :key="contact.id" @click="selectContact(contact)" :class="{ 'selected': contact == selected }">
                 <div class="avatar"><img :src="contact.profile_image" :alt="contact.name"></div>
                 <div class="contact">
                     <p class="name">{{contact.name}}</p>
@@ -25,30 +25,37 @@
         },
         data() {
             return {
-                selected: 0 //this.contacts.length ? this.contacts[0] : null
-            }
+                selected: this.contacts.length ? this.contacts[0] : null
+            }  
         },
+        
         methods: {
-            selectContact(index,contact){
-                this.selected = index;
+            //remove index in v-for contact and @click=selectContact(index,contact)
+            selectContact(contact){
+                this.selected = contact;//before is index
                 this.$emit('selected',contact);
             },
         },
         computed:{
-            sortedContact(){
-                return _.sortBy(this.contacts,[(contact)=>{
-                    if(contact == this.selected){
-                        return Infinity;
-                    }
-                    return contact.unread;
-                }]).reverse()
+            /*
+            //tidak di pakai karena susah untuk desc
+            sortedContacts(){
+                // Set slice() to avoid to generate an infinite loop!
+                return this.contacts.slice().sort(function(a, b) {
+                    return a.messageid - b.messageid;
+                });    
+            },
+            */
+            sortArrays() {
+                return _.orderBy(this.contacts, 'messageid', 'desc');
             }
+            
         }
     }
 </script>
 <style lang="scss">
 .contact-list{
-    flex: 2;
+    flex: 1;
     max-height: 600px;
     overflow: scroll;
     border-left: 1px solid #b9b9c1;

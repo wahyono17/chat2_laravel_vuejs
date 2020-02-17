@@ -44,4 +44,8 @@ class User extends Authenticatable
     public function comment() {
          return $this->hasMany('App\Comment');
     }
+
+    public function message() {
+        return $this->hasMany(message::class);
+    }
 }

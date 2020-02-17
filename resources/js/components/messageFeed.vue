@@ -38,6 +38,7 @@ export default {
 }
 </script>
 </script>
+
 <style lang="scss" scoped>
 .feed {
     background: #f0f0f0;

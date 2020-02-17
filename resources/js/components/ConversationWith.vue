@@ -1,6 +1,6 @@
 <template>
     <div class="conversation">
-        <h1>{{contact ? contact.name : 'select a contact'}}</h1>
+        <h1>{{contact.name}}</h1>
         <messageFeed :contact="contact" :messages="messages"/>
         <messageComposer @send="sendMessage"/>
     </div>
@@ -11,14 +11,30 @@ import messageComposer from './messageComposer';
 import messageFeed from './messageFeed';
     export default {
         props:{
-           contact:{
+            contact:{
                 type:Object,
                 default:null
             },
-            messages:{
-                type:Array,
-                default:[]
+            user:{
+                type:Object,
+                required:true
             }
+        },
+        data(){
+            return {
+                messages:[]
+            }
+        },
+        mounted(){
+            Echo.private(`messages.${this.user.id}`)
+                .listen('NewMessage', (e) => {
+                    this.messages.push(e.message);
+                });
+            axios.get(`/conversation/${this.contact.id}`)
+                .then(response=>{
+                    this.messages = response.data;
+                });
+            
         },
         methods: {
             //ini adalah method untuk save message ke database
@@ -31,8 +47,9 @@ import messageFeed from './messageFeed';
                     contact_id : this.contact.id,
                     text : text
                 }).then ((response)=>{
+                    this.messages.push(response.data);//munculkan pesan di perkacapan
                     //console.log(response.data);
-                    this.$emit('new',response.data);
+                    //this.$emit('new',response.data);
                 })
             }
         },
